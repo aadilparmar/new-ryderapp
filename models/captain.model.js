@@ -28,7 +28,7 @@ const captainSchema= new mongoose.Schema({
      socketId:{
         type:String,
      },
-     status:{
+     currentStatus:{
         type:String,
         enum:['active','inactive'],
         default:'inactive'
@@ -52,7 +52,7 @@ const captainSchema= new mongoose.Schema({
         vehicleType:{
             type:String,
             required:true,
-            minlength:['car','motorcycle','auto']    
+            enum:['car','motorcycle','auto']    
         }
      },
      location:{
