@@ -1,6 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
+import {CaptainDataContext} from "../Context/CaptainContext";
+
+
+
 const CaptainSignup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,15 +16,27 @@ const CaptainSignup = () => {
   const [plate, setPlate] = useState(""); 
   const [capacity, setCapacity] = useState(""); 
   const [vehicleType, setVehicleType] = useState(""); 
-  const submitHandler = (e) => {
+
+  const navigate = useNavigate();
+  const { captain, setCaptain } = React.useContext(CaptainDataContext);
+
+
+  const submitHandler = async (e) => {
     e.preventDefault();
-    setCaptainData({
+    const newCaptain = {
       email: email,
       password: password,
       fullname: { firstname: firstname, lastname: lastname },
-      vehicle: { color: color, plate: plate, capacity: capacity, vehicleType: vehicleType },
-    });
-    console.log(captainData);
+      vehicle:{vehicleType:vehicleType,capacity:capacity,color:color,plate:plate}
+    };
+
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, newCaptain);
+
+    if(response.status === 201){
+      const data = response.data;
+      setCaptain(data.captain);
+      navigate("/captain-login");
+    }
     setEmail("");
     setPassword("");
     setFirstname("");
@@ -107,14 +124,17 @@ const CaptainSignup = () => {
                   onChange={(e) => setCapacity(e.target.value)}
                   placeholder="Vehicle Capacity"
                 />
-                <input
+                <select
                   className="bg-[#eeeeee] mt-2 rounded px-4 py-2 border w-full text-base placeholder:text-sm"
-                  type="text"
-                  required
                   value={vehicleType}
                   onChange={(e) => setVehicleType(e.target.value)}
-                  placeholder="Car/Motorcycle/Auto"
-                />
+                  required
+                >
+                  <option value="">Select Vehicle Type</option>
+                  <option value="car">Car</option>
+                  <option value="motorcycle">Motorcycle</option>
+                  <option value="auto">Auto</option>
+                </select>
               </div>
               <button className="bg-[#111] text-white font-semibold mb-3 rounded px-4 py-2 border w-full text-lg placeholder:text-base">
                 Sign Up
