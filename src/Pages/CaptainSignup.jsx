@@ -11,7 +11,6 @@ const CaptainSignup = () => {
   const [password, setPassword] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
-  const [captainData, setCaptainData] = useState({});
   const [color, setColor] = useState("");
   const [plate, setPlate] = useState(""); 
   const [capacity, setCapacity] = useState(""); 

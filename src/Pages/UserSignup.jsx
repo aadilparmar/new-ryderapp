@@ -10,7 +10,6 @@ const UserSignup = () => {
   const [password, setPassword] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
-  const [userData, setUserData] = useState({});
 
   const navigate = useNavigate();
 
