@@ -1,18 +1,18 @@
 import React from "react";
 
-const ConfirmRide = (props) => {
+const LookingForRyder = (props) => {
   return (
-    <div>
+    <div className="">
       <h5
         className=" text-center w-[93%] absolute top-0 "
         onClick={() => {
-          props.setConfirmRidePanelOpen(false);
+          props.setLookingForRyderPanelOpen(false);
         }}
       >
         <i className="ri-arrow-down-wide-line text-3xl text-gray-400"></i>
       </h5>
-      <h3 className="text-2xl font-semibold ">Confirm Your Ryde</h3>
-      <div className="flex gap-2 justify-between flex-col items-center ">
+      <h3 className="text-2xl font-semibold ">Looking for Ryder</h3>
+      <div className="flex gap-2 justify-between flex-col items-center">
         <img className="h-20" src="/assets/Car1.png" alt="car" />
         <div className="w-full">
           <div className="flex items-center gap-5 p-3 border-b-2">
@@ -41,18 +41,9 @@ const ConfirmRide = (props) => {
             </div>
           </div>
         </div>
-        <button
-          onClick={() => {
-            props.setConfirmRidePanelOpen(false);
-            props.setLookingForRyderPanelOpen(true);
-          }}
-          className="w-full bg-green-800 text-white font-semibold p-2 rounded-lg "
-        >
-          Confirm
-        </button>
       </div>
     </div>
   );
 };
 
-export default ConfirmRide;
+export default LookingForRyder;

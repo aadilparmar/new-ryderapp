@@ -5,6 +5,7 @@ import "remixicon/fonts/remixicon.css";
 import LocationSearchPanel from "../Components/LocationSearchPanel";
 import VehiclePanel from "../Components/VehiclePanel";
 import ConfirmRide from "../Components/ConfirmRide";
+import LookingForRyder from "../Components/LookingForRyder";
 const Home = () => {
   const [pickup, setPickup] = React.useState("");
   const [drop, setDrop] = React.useState("");
@@ -13,9 +14,10 @@ const Home = () => {
   const closePanelRef = useRef();
   const vehiclePanelRef = useRef();
   const confirmRideRef = useRef();
+  const lookingForRyderRef = useRef();
   const [confirmRidePanelOpen, setConfirmRidePanelOpen] = React.useState(false);
   const [vehiclePanelOpen, setVehiclePanelOpen] = React.useState(false);
-
+  const [lookingForRyderPanelOpen, setLookingForRyderPanelOpen] = React.useState(false);
   const submitHandler = async (e) => {
     e.preventDefault();
   };
@@ -70,6 +72,20 @@ const Home = () => {
     },
     [confirmRidePanelOpen]
   );
+  useGSAP(
+    function () {
+      if (lookingForRyderPanelOpen) {
+        gsap.to(lookingForRyderRef.current, {
+          transform: "translateY(0%)",
+        });
+      } else {
+        gsap.to(lookingForRyderRef.current, {
+          transform: "translateY(100%)",
+        });
+      }
+    },
+    [lookingForRyderPanelOpen]
+  );
   return (
     <div className="h-screen relative overflow-hidden">
       <img
@@ -84,8 +100,8 @@ const Home = () => {
           alt=""
         />
       </div>
-      <div className="flex flex-col justify-end absolute h-screen top-0 w-full">
-        <div className="h-[30%] p-5 bg-white">
+      <div className="flex flex-col justify-end absolute h-screen top-0 w-full ">
+        <div className="h-[30%] p-5 bg-white rounded-tl-2xl rounded-tr-2xl">
           <h5
             onClick={() => setPanelOpen(false)}
             ref={closePanelRef}
@@ -105,7 +121,7 @@ const Home = () => {
               onChange={(e) => setPickup(e.target.value)}
               className="bg-[#eee] px-8 py-2 rounded-lg mt-3 font-semibold w-full"
               type="text"
-              placeholder="📍Add Pickup Location"
+              placeholder="Add Pickup Location"
             />
             <input
               onClick={() => setPanelOpen(true)}
@@ -113,7 +129,7 @@ const Home = () => {
               onChange={(e) => setDrop(e.target.value)}
               className="bg-[#eee] px-8 py-2 rounded-lg mt-5 font-semibold w-full"
               type="text"
-              placeholder="📍Add Drop Location"
+              placeholder="Add Drop Location"
             />
           </form>
         </div>
@@ -126,16 +142,30 @@ const Home = () => {
       </div>
       <div
         ref={vehiclePanelRef}
-        className="fixed z-10 bottom-0 bg-white w-full px-3 py-8 translate-y-full"
+        className="fixed z-10 bottom-0 bg-white w-full px-3 py-8 translate-y-full rounded-tl-2xl rounded-tr-2xl"
       >
-        <VehiclePanel setConfirmRidePanelOpen={setConfirmRidePanelOpen} setVehiclePanelOpen={setVehiclePanelOpen}/>
-        </div>
-        <div
+        <VehiclePanel
+          setVehiclePanelOpen={setVehiclePanelOpen}
+          setConfirmRidePanelOpen={setConfirmRidePanelOpen}
+        />
+      </div>
+      <div
         ref={confirmRideRef}
-        className="fixed z-10 bottom-0 bg-white w-full px-3 py-8 translate-y-full"
+        className="fixed z-10 bottom-0 bg-white w-full px-3 py-8 rounded-tl-2xl rounded-tr-2xl translate-y-full"
       >
-        <ConfirmRide setVehiclePanelOpen={setVehiclePanelOpen}/>
-        </div>
+        <ConfirmRide
+          setConfirmRidePanelOpen={setConfirmRidePanelOpen}
+          setLookingForRyderPanelOpen={setLookingForRyderPanelOpen}
+        />
+      </div>
+      <div
+        ref={lookingForRyderRef}
+        className="fixed z-10 bottom-0 bg-white w-full px-3 py-8 rounded-tl-2xl rounded-tr-2xl  translate-y-full"
+      >
+        <LookingForRyder
+          setLookingForRyderPanelOpen={setLookingForRyderPanelOpen}
+        />
+      </div>
     </div>
   );
 };
