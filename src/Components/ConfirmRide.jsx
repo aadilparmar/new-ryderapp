@@ -11,7 +11,7 @@ const ConfirmRide = (props) => {
       >
         <i className="ri-arrow-down-wide-line text-3xl text-gray-400"></i>
       </h5>
-      <h3 className="text-2xl font-semibold ">Confirm Your Ryde</h3>
+      <h3 className="text-3xl  font-extrabold ">Confirm Your Ryde</h3>
       <div className="flex gap-2 justify-between flex-col items-center ">
         <img className="h-20" src="/assets/Car1.png" alt="car" />
         <div className="w-full">

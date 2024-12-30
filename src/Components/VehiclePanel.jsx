@@ -11,7 +11,7 @@ const VehiclePanel = (props) => {
       >
         <i className="ri-arrow-down-wide-line text-3xl text-gray-400"></i>
       </h5>
-      <h3 className="text-2xl font-semibold ">Choose your Ryde</h3>
+      <h3 className="text-3xl  font-extrabold ">Choose your Ryde</h3>
       <div
         onClick={() => {
           props.setConfirmRidePanelOpen(true);

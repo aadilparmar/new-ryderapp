@@ -54,7 +54,7 @@ const UserLogin = () => {
           required
           placeholder="password"
         />
-        <button className="bg-[#111] text-white font-semibold mb-3 rounded px-4 py-2 border w-full text-lg placeholder:text-base">Login</button>
+        <button  className="bg-[#111] text-white font-semibold mb-3 rounded px-4 py-2 border w-full text-lg placeholder:text-base">Login</button>
         <p>New here? <Link to={'/signup'} className="text-blue-600">Create new Account</Link></p>
       </form>
        </div>

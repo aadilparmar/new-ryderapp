@@ -6,6 +6,7 @@ import LocationSearchPanel from "../Components/LocationSearchPanel";
 import VehiclePanel from "../Components/VehiclePanel";
 import ConfirmRide from "../Components/ConfirmRide";
 import LookingForRyder from "../Components/LookingForRyder";
+import WaitingForRyder from "../Components/WaitingForRyder";
 const Home = () => {
   const [pickup, setPickup] = React.useState("");
   const [drop, setDrop] = React.useState("");
@@ -15,9 +16,13 @@ const Home = () => {
   const vehiclePanelRef = useRef();
   const confirmRideRef = useRef();
   const lookingForRyderRef = useRef();
+  const ryderFoundRef = useRef();
   const [confirmRidePanelOpen, setConfirmRidePanelOpen] = React.useState(false);
   const [vehiclePanelOpen, setVehiclePanelOpen] = React.useState(false);
-  const [lookingForRyderPanelOpen, setLookingForRyderPanelOpen] = React.useState(false);
+  const [lookingForRyderPanelOpen, setLookingForRyderPanelOpen] =
+    React.useState(false);
+  const [ryderFoundPanelOpen, setryderFoundPanelOpen] = React.useState(false);
+
   const submitHandler = async (e) => {
     e.preventDefault();
   };
@@ -86,10 +91,24 @@ const Home = () => {
     },
     [lookingForRyderPanelOpen]
   );
+  useGSAP(
+    function () {
+      if (ryderFoundPanelOpen) {
+        gsap.to(ryderFoundRef.current, {
+          transform: "translateY(0%)",
+        });
+      } else {
+        gsap.to(ryderFoundRef.current, {
+          transform: "translateY(100%)",
+        });
+      }
+    },
+    [ryderFoundPanelOpen]
+  );
   return (
     <div className="h-screen relative overflow-hidden">
       <img
-        className="w-16 absolute left-5 top-4"
+        className="w-[6rem] absolute left-5 top-4"
         src="/assets/Ryderlogo2.png"
         alt="ryder-logo"
       />
@@ -109,28 +128,34 @@ const Home = () => {
           >
             <i className="ri-arrow-down-s-line"></i>
           </h5>
-          <h4 className="text-2xl font-semibold">Find a Trip</h4>
+          <h4 className="text-3xl  font-extrabold mb-6">Find a Trip</h4>
           <form
             onSubmit={(e) => {
               submitHandler(e);
             }}
           >
-            <input
-              onClick={() => setPanelOpen(true)}
-              value={pickup}
-              onChange={(e) => setPickup(e.target.value)}
-              className="bg-[#eee] px-8 py-2 rounded-lg mt-3 font-semibold w-full"
-              type="text"
-              placeholder="Add Pickup Location"
-            />
-            <input
-              onClick={() => setPanelOpen(true)}
-              value={drop}
-              onChange={(e) => setDrop(e.target.value)}
-              className="bg-[#eee] px-8 py-2 rounded-lg mt-5 font-semibold w-full"
-              type="text"
-              placeholder="Add Drop Location"
-            />
+            <div className="flex flex-row">
+              <i className="ri-map-pin-fill text-green-700 text-xl pt-4 pr-2 "></i>
+              <input
+                onClick={() => setPanelOpen(true)}
+                value={pickup}
+                onChange={(e) => setPickup(e.target.value)}
+                className="bg-[#eee] px-2 py-2 rounded-lg mt-3 font-bold w-full"
+                type="text"
+                placeholder="Add Pickup Location"
+              />
+            </div>
+            <div className="flex flex-row ">
+              <i className="ri-map-pin-fill text-red-700 text-xl pt-6 pr-2"></i>
+              <input
+                onClick={() => setPanelOpen(true)}
+                value={drop}
+                onChange={(e) => setDrop(e.target.value)}
+                className="bg-[#eee] px-2 py-2 rounded-lg mt-5 font-bold w-full"
+                type="text"
+                placeholder="Add Drop Location"
+              />
+            </div>
           </form>
         </div>
         <div ref={panelRef} className="h-0 bg-white">
@@ -165,6 +190,12 @@ const Home = () => {
         <LookingForRyder
           setLookingForRyderPanelOpen={setLookingForRyderPanelOpen}
         />
+      </div>
+      <div
+        ref={ryderFoundRef}
+        className="fixed z-10 bottom-0 bg-white w-full px-3 py-8 translate-y-full rounded-tl-2xl rounded-tr-2xl "
+      >
+        <WaitingForRyder setryderFoundPanelOpen={setryderFoundPanelOpen} />
       </div>
     </div>
   );
