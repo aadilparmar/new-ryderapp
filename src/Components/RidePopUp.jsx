@@ -3,7 +3,12 @@ import React from "react";
 const RidePopUp = (props) => {
   return (
     <div>
-      <h5 className=" text-center w-[93%] absolute top-0 " onClick={() => {props.setRidePopUpOpen(false)}}>
+      <h5
+        className=" text-center w-[93%] absolute top-0 "
+        onClick={() => {
+          props.setRidePopUpOpen(false);
+        }}
+      >
         <i className="ri-arrow-down-wide-line text-3xl text-black"></i>
       </h5>
       <h3 className="text-3xl  font-semibold mt-3 ">Rydes Available for you</h3>
@@ -14,7 +19,11 @@ const RidePopUp = (props) => {
             src="/assets/ryder1.jpg"
             alt=""
           />
-          <h2 className="font-medium text-2xl">Aadil Parmar</h2>
+          <h2 className="font-medium text-2xl capitalize">
+            {props.ride?.user.fullname.firstname +
+              " " +
+              props.ride?.user.fullname.lastname}
+          </h2>
         </div>
         <h5 className="font-medium text-gray-900 text-xl">1.2 KM</h5>
       </div>
@@ -23,46 +32,50 @@ const RidePopUp = (props) => {
           <div className="flex items-center gap-5 p-3 border-b-2">
             <i className="ri-map-pin-user-fill"></i>
             <div>
-              <p className="text-sm -mt-1 text-gray-600">Pick Up</p>
-              <h3 className="text-lg font-medium">561/11-A</h3>
+              <p className="text-lg -mt-1 text-black">Pick Up</p>
+
               <p className="text-sm -mt-1 text-gray-600">
-                Kankariya Talab , Ahmedabad
+                {props.ride?.pickup}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-5 p-3 border-b-2">
             <i className="ri-map-pin-2-fill text-lg"></i>
             <div>
-              <p className="text-sm -mt-1 text-gray-600">Drop</p>
-              <h3 className="text-lg font-medium">A2-304</h3>
+              <p className="text-lg -mt-1 text-black">Drop</p>
+
               <p className="text-sm -mt-1 text-gray-600">
-                Shilpan Onyx,Rajkot,Gujarat
+                {props.ride?.destination}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-5 p-3 pb-5">
             <i className="ri-currency-line "></i>
             <div>
-              <h3 className="text-lg font-medium">₹123.86</h3>
+              <h3 className="text-lg font-medium">₹{props.ride?.fare}</h3>
               <p className="text-sm -mt-1 text-gray-600">Cash Payment</p>
             </div>
           </div>
         </div>
         <div className="flex flex-row gap-3 w-full">
-        <button
-          onClick={() => {props.setConfirmRidePopUpOpen(true);props.setRidePopUpOpen(false);}}
-          className="w-full bg-green-800 text-white text-2xl font-medium p-5 rounded-lg "
-        >
-          Accept Ryde
-        </button>
-        <button
-          onClick={() => {props.setRidePopUpOpen(false)}}
-          className="w-full bg-gray-400 text-gray-900 text-2xl font-medium p-5 rounded-lg "
-        >
-          Ignore Ryde
-        </button>
+          <button
+            onClick={() => {
+              props.setConfirmRidePopUpOpen(true);
+              props.confirmRide();
+            }}
+            className="w-full bg-green-800 text-white text-2xl font-medium p-5 rounded-lg "
+          >
+            Accept Ryde
+          </button>
+          <button
+            onClick={() => {
+              props.setRidePopUpOpen(false);
+            }}
+            className="w-full bg-gray-400 text-gray-900 text-2xl font-medium p-5 rounded-lg "
+          >
+            Ignore Ryde
+          </button>
         </div>
-        
       </div>
     </div>
   );

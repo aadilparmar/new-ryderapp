@@ -1,6 +1,6 @@
 import React from "react";
 
-const WaitingForRyder = () => {
+const WaitingForRyder = (props) => {
   return (
     <div>
       <h5
@@ -15,8 +15,8 @@ const WaitingForRyder = () => {
       <div className="flex items-center justify-between">
         <img className="h-12" src="/assets/Car1.png" alt="car" />
         <div className="text-right">
-          <h2 className="text-lg font-medium">Aadil Parmar</h2>
-          <h4 className="text-xl font-semibold -mt-1 -mb-1">GJ 03 2425</h4>
+          <h2 className="text-lg font-medium">{props.ride?.captain.fullname.firstname}</h2>
+          <h4 className="text-xl font-semibold -mt-1 -mb-1">{props.ride?.captain.vehicle.plate}</h4>
           <p className="text-sm text-gray-600">Mercedes Benz S class 350</p>
         </div>
       </div>

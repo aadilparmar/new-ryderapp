@@ -18,25 +18,20 @@ const LookingForRyder = (props) => {
           <div className="flex items-center gap-5 p-3 border-b-2">
             <i className="ri-map-pin-user-fill"></i>
             <div>
-              <h3 className="text-lg font-medium">561/11-A</h3>
-              <p className="text-sm -mt-1 text-gray-600">
-                Kankariya Talab , Ahmedabad
-              </p>
+              <h3 className="text-lg font-medium">{props.pickup}</h3>
+              
             </div>
           </div>
           <div className="flex items-center gap-5 p-3 border-b-2">
             <i className="ri-map-pin-2-fill text-lg"></i>
             <div>
-              <h3 className="text-lg font-medium">A2-304</h3>
-              <p className="text-sm -mt-1 text-gray-600">
-                Shilpan Onyx,Rajkot,Gujarat
-              </p>
+              <h3 className="text-lg font-medium">{props.drop}</h3>
             </div>
           </div>
           <div className="flex items-center gap-5 p-3 ">
             <i className="ri-currency-line "></i>
             <div>
-              <h3 className="text-lg font-medium">₹123.86</h3>
+              <h3 className="text-lg font-medium">{props.fare[props.vehicleType]}</h3>
               <p className="text-sm -mt-1 text-gray-600">Cash Payment</p>
             </div>
           </div>

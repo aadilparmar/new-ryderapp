@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import "remixicon/fonts/remixicon.css";
@@ -7,6 +7,13 @@ import VehiclePanel from "../Components/VehiclePanel";
 import ConfirmRide from "../Components/ConfirmRide";
 import LookingForRyder from "../Components/LookingForRyder";
 import WaitingForRyder from "../Components/WaitingForRyder";
+import { useState } from "react";
+import axios from "axios";
+import { SocketContext } from "../Context/SocketContext";
+import { UserDataContext } from "../Context/UserContext";
+import { useContext } from "react";
+
+
 const Home = () => {
   const [pickup, setPickup] = React.useState("");
   const [drop, setDrop] = React.useState("");
@@ -22,9 +29,63 @@ const Home = () => {
   const [lookingForRyderPanelOpen, setLookingForRyderPanelOpen] =
     React.useState(false);
   const [ryderFoundPanelOpen, setryderFoundPanelOpen] = React.useState(false);
+  const [activeField, setActiveField] = useState(null);
+  const [destinationSuggestions, setDestinationSuggestions] = useState([]);
+  const [pickupSuggestions, setPickupSuggestions] = useState([]);
+  const [vehicleType, setVehicleType] = useState(null);
+  const [fare, setFare] = useState({});
+  const [ ride, setRide ] = useState(null)
+  const { socket } = useContext(SocketContext);
+  const { user } = useContext(UserDataContext);
+
+  useEffect(() => {
+    socket.emit("join", { userType: "user", userId: user._id });
+  }, [user]);
+
+  socket.on("ride-confirmed", ride => {
+    setryderFoundPanelOpen(true);
+    setLookingForRyderPanelOpen(false);
+    setRide(ride);
+  });
 
   const submitHandler = async (e) => {
     e.preventDefault();
+  };
+
+  const handlePickupChange = async (e) => {
+    setPickup(e.target.value);
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`,
+        {
+          params: { input: e.target.value },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setPickupSuggestions(response.data);
+    } catch {
+      console.log("error");
+    }
+  };
+
+  const handleDestinationChange = async (e) => {
+    setDrop(e.target.value);
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`,
+        {
+          params: { input: e.target.value },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setDestinationSuggestions(response.data);
+    } catch {
+      console.log("error");
+    }
   };
 
   useGSAP(
@@ -105,6 +166,37 @@ const Home = () => {
     },
     [ryderFoundPanelOpen]
   );
+
+  async function findTrip() {
+    setVehiclePanelOpen(true);
+    setPanelOpen(false);
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/rides/get-fare`,
+      {
+        params: { pickup, destination: drop },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    setFare(response.data);
+  }
+  async function creatRide() {
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/rides/create`,
+      {
+        pickup,
+        destination: drop,
+        vehicleType: vehicleType,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    console.log(response.data);
+  }
   return (
     <div className="h-screen relative overflow-hidden">
       <img
@@ -137,31 +229,51 @@ const Home = () => {
             <div className="flex flex-row">
               <i className="ri-map-pin-fill text-green-700 text-xl pt-4 pr-2 "></i>
               <input
-                onClick={() => setPanelOpen(true)}
+                onClick={() => {
+                  setPanelOpen(true);
+                  setActiveField("pickup");
+                }}
                 value={pickup}
-                onChange={(e) => setPickup(e.target.value)}
-                className="bg-[#eee] px-2 py-2 rounded-lg mt-3 font-bold w-full"
+                className="bg-[#eee] px-2 py-2 rounded-lg mt-3 font-semibold w-full"
                 type="text"
+                onChange={handlePickupChange}
                 placeholder="Add Pickup Location"
               />
             </div>
             <div className="flex flex-row ">
               <i className="ri-map-pin-fill text-red-700 text-xl pt-6 pr-2"></i>
               <input
-                onClick={() => setPanelOpen(true)}
+                onClick={() => {
+                  setPanelOpen(true);
+                  setActiveField("drop");
+                }}
                 value={drop}
-                onChange={(e) => setDrop(e.target.value)}
-                className="bg-[#eee] px-2 py-2 rounded-lg mt-5 font-bold w-full"
+                className="bg-[#eee] px-2 py-2 rounded-lg mt-5 font-semibold w-full"
                 type="text"
+                onChange={handleDestinationChange}
                 placeholder="Add Drop Location"
               />
             </div>
           </form>
+          <button
+            onClick={findTrip}
+            className="bg-black text-white px-4 py-2 rounded-lg mt-3 w-full"
+          >
+            Find Trip
+          </button>
         </div>
         <div ref={panelRef} className="h-0 bg-white">
           <LocationSearchPanel
+            suggestions={
+              activeField === "pickup"
+                ? pickupSuggestions
+                : destinationSuggestions
+            }
+            setPickup={setPickup}
+            setDrop={setDrop}
             setPanelOpen={setPanelOpen}
             setVehiclePanelOpen={setVehiclePanelOpen}
+            activeField={activeField}
           />
         </div>
       </div>
@@ -170,6 +282,9 @@ const Home = () => {
         className="fixed z-10 bottom-0 bg-white w-full px-3 py-8 translate-y-full rounded-tl-2xl rounded-tr-2xl"
       >
         <VehiclePanel
+          creatRide={creatRide}
+          selectVehicle={setVehicleType}
+          fare={fare}
           setVehiclePanelOpen={setVehiclePanelOpen}
           setConfirmRidePanelOpen={setConfirmRidePanelOpen}
         />
@@ -179,15 +294,25 @@ const Home = () => {
         className="fixed z-10 bottom-0 bg-white w-full px-3 py-8 rounded-tl-2xl rounded-tr-2xl translate-y-full"
       >
         <ConfirmRide
+          pickup={pickup}
+          drop={drop}
+          fare={fare}
+          creatRide={creatRide}
+          vehicleType={vehicleType}
           setConfirmRidePanelOpen={setConfirmRidePanelOpen}
           setLookingForRyderPanelOpen={setLookingForRyderPanelOpen}
         />
       </div>
       <div
         ref={lookingForRyderRef}
-        className="fixed z-10 bottom-0 bg-white w-full px-3 py-8 rounded-tl-2xl rounded-tr-2xl  translate-y-full"
+        className="fixed z-10 bottom-0 bg-white w-full px-3 py-8 rounded-tl-2xl rounded-tr-2xl  translate-y-full overflow-hidden"
       >
         <LookingForRyder
+          pickup={pickup}
+          drop={drop}
+          fare={fare}
+          creatRide={creatRide}
+          vehicleType={vehicleType}
           setLookingForRyderPanelOpen={setLookingForRyderPanelOpen}
         />
       </div>
@@ -195,7 +320,7 @@ const Home = () => {
         ref={ryderFoundRef}
         className="fixed z-10 bottom-0 bg-white w-full px-3 py-8 translate-y-full rounded-tl-2xl rounded-tr-2xl "
       >
-        <WaitingForRyder setryderFoundPanelOpen={setryderFoundPanelOpen} />
+        <WaitingForRyder ride={ride} setryderFoundPanelOpen={setryderFoundPanelOpen} />
       </div>
     </div>
   );

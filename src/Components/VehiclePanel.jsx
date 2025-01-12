@@ -14,6 +14,7 @@ const VehiclePanel = (props) => {
       <h3 className="text-3xl  font-extrabold ">Choose your Ryde</h3>
       <div
         onClick={() => {
+          props.selectVehicle('car')
           props.setConfirmRidePanelOpen(true);
           props.setVehiclePanelOpen(false);
         }}
@@ -32,10 +33,11 @@ const VehiclePanel = (props) => {
             Affordable,compact Rides
           </p>
         </div>
-        <h2 className="text-2xl font-semibold">₹203.40</h2>
+        <h2 className="text-2xl font-semibold">₹{props.fare.car}</h2>
       </div>
       <div
         onClick={() => {
+          props.selectVehicle('moto')
           props.setConfirmRidePanelOpen(true);
           props.setVehiclePanelOpen(false);
         }}
@@ -54,10 +56,11 @@ const VehiclePanel = (props) => {
             Affordable,compact Rides
           </p>
         </div>
-        <h2 className="text-2xl font-semibold">₹203.40</h2>
+        <h2 className="text-2xl font-semibold">₹{props.fare.moto}</h2>
       </div>
       <div
         onClick={() => {
+          props.selectVehicle('auto')
           props.setConfirmRidePanelOpen(true);
           props.setVehiclePanelOpen(false);
         }}
@@ -76,7 +79,7 @@ const VehiclePanel = (props) => {
             Affordable,compact Rides
           </p>
         </div>
-        <h2 className="text-2xl font-semibold">₹203.40</h2>
+        <h2 className="text-2xl font-semibold">₹{props.fare.auto}</h2>
       </div>
     </div>
   );

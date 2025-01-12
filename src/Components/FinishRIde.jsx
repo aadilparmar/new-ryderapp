@@ -1,17 +1,12 @@
 import React from 'react'
-import { Link } from "react-router-dom";
-const ConfirmRidePopUpPanel = (props) => {
-
-  const [otp,setOtp]=React.useState('');
-  const submitHandler=(e)=>{
-    e.preventDefault();
-  }
+import {Link} from 'react-router-dom'
+const FinishRIde = (props) => {
   return (
     <div>
-      <h5 className=" text-center w-[93%] absolute top-0 " onClick={() => {props.setConfirmRidePopUpOpen(false);}}>
+      <h5 className=" text-center w-[93%] absolute top-0 " onClick={() => {props.setFinishRidePanel(false)}}>
         <i className="ri-arrow-down-wide-line text-3xl text-black"></i>
       </h5>
-      <h3 className="text-3xl  font-semibold mt-3 ">Confirm to Pick Up</h3>
+      <h3 className="text-3xl  font-semibold mt-3 ">Finish the Ryde</h3>
       <div className="flex items-center justify-between m-1 mt-5 p-3 bg-[#f4f4f4] rounded-lg">
         <div className="flex items-center gap-3  justify-center">
           <img
@@ -53,23 +48,14 @@ const ConfirmRidePopUpPanel = (props) => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-3 w-full mt-6">
-        <form className='' onSubmit={(e)=>{
-          submitHandler(e)
-        }}>
-          <input type="number" className='bg-[#eee] px-6 py-4 font-mono rounded-lg w-full mt-3 mb-6 text-xl' placeholder='Enter OTP' value={otp} onChange={(e)=>setOtp(e.target.value)}/>
-        <Link to="/captain-riding"
-          className="w-full flex mb-3 justify-center bg-green-800 text-white text-2xl font-medium p-5 rounded-lg "
+        <div className="flex flex-row gap-3 w-full">
+        <Link
+        to='/captain-home'
+          onClick={() => {props.setFinishRidePanel(false)}}
+          className="w-full flex justify-center bg-green-800 text-white text-2xl font-medium p-5 rounded-lg "
         >
-          Confirm Ryde
+          Finish Ryde
         </Link>
-        <button
-          onClick={() => {props.setRidePopUpOpen(false);props.setConfirmRidePopUpOpen(false);}}
-          className="w-full bg-red-800 text-white text-2xl font-medium p-5 rounded-lg "
-        >
-          Cancel Ryde
-        </button>
-        </form>
         </div>
         
       </div>
@@ -77,4 +63,4 @@ const ConfirmRidePopUpPanel = (props) => {
   )
 }
 
-export default ConfirmRidePopUpPanel
+export default FinishRIde

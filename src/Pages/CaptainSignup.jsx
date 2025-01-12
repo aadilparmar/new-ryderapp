@@ -1,10 +1,8 @@
 import React from "react";
-import { Link ,useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import {CaptainDataContext} from "../Context/CaptainContext";
-
-
+import { CaptainDataContext } from "../Context/CaptainContext";
 
 const CaptainSignup = () => {
   const [email, setEmail] = useState("");
@@ -12,34 +10,47 @@ const CaptainSignup = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [color, setColor] = useState("");
-  const [plate, setPlate] = useState(""); 
-  const [capacity, setCapacity] = useState(""); 
-  const [vehicleType, setVehicleType] = useState(""); 
-
+  const [plate, setPlate] = useState("");
+  const [capacity, setCapacity] = useState("");
+  const [vehicleType, setVehicleType] = useState("");
   const navigate = useNavigate();
   const { captain, setCaptain } = React.useContext(CaptainDataContext);
 
-
   const submitHandler = async (e) => {
     e.preventDefault();
-    const newCaptain = {
+    const captainData = {
+      fullname: { 
+        firstname: firstname, 
+        lastname: lastname 
+      },
       email: email,
       password: password,
-      fullname: { firstname: firstname, lastname: lastname },
-      vehicle:{vehicleType:vehicleType,capacity:capacity,color:color,plate:plate}
+      vehicle: {
+        vehicleType: vehicleType,
+        capacity: capacity,
+        color: color,
+        plate: plate,
+      },
     };
 
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, newCaptain);
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/captains/register`,
+      captainData
+    );
 
-    if(response.status === 201){
+    if (response.status === 201) {
       const data = response.data;
       setCaptain(data.captain);
-      navigate("/captain-login");
+      navigate("/captain-home");
     }
     setEmail("");
     setPassword("");
     setFirstname("");
     setLastname("");
+    setColor("");
+    setVehicleType("");
+    setCapacity("");
+    setVehicleType("");
   };
   return (
     <div>
@@ -104,7 +115,7 @@ const CaptainSignup = () => {
                   type="text"
                   required
                   value={color}
-                onChange={(e) => setColor(e.target.value)}
+                  onChange={(e) => setColor(e.target.value)}
                   placeholder="Vehicle color"
                 />
                 <input
@@ -112,8 +123,8 @@ const CaptainSignup = () => {
                   type="text"
                   required
                   value={plate}
-                onChange={(e) => setPlate(e.target.value)}
-                 placeholder="GJ XX XXXX  (number plate)"
+                  onChange={(e) => setPlate(e.target.value)}
+                  placeholder="GJ XX XXXX  (number plate)"
                 />
                 <input
                   className="bg-[#eeeeee] mt-2 rounded px-4 py-2 border w-full text-base placeholder:text-sm"
