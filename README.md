@@ -19,7 +19,7 @@ The backend is built with Node.js and Express. It handles user and captain authe
     ```
     PORT=4000
     DB_CONNECT=mongodb://0.0.0.0/ryder
-    JWT_SECRET=ryder-secret
+    JWT_SECRET=your-secret-key 
     GOOGLE_MAPS_API=your-google-maps-api-key
     ```
 
