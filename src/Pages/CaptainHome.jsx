@@ -30,7 +30,7 @@ const CaptainHome = () => {
     const updateLocation = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {
-              
+            
                 socket.emit('update-location-captain', {
                     userId: captain._id,
                     location: {
@@ -66,7 +66,6 @@ const CaptainHome = () => {
         },
       }
     );
-
     setRidePopUpOpen(false);
     setConfirmRidePopUpOpen(true);
   }
@@ -141,6 +140,7 @@ const CaptainHome = () => {
           <ConfirmRidePopUpPanel
             setConfirmRidePopUpOpen={setConfirmRidePopUpOpen}
             setRidePopUpOpen={setRidePopUpOpen}
+            ride={ride}
           />
         </div>
       </div>

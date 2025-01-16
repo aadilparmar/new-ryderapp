@@ -20,7 +20,7 @@ const CaptainProtectedWrapper = ({
             }
         }).then(response => {
             if (response.status === 200) {
-                setCaptain(response.data.captain)
+                setCaptain(response.data)
             }
         }).catch(err => {
                 console.log(err)

@@ -13,7 +13,6 @@ import { SocketContext } from "../Context/SocketContext";
 import { UserDataContext } from "../Context/UserContext";
 import { useContext } from "react";
 
-
 const Home = () => {
   const [pickup, setPickup] = React.useState("");
   const [drop, setDrop] = React.useState("");
@@ -34,7 +33,7 @@ const Home = () => {
   const [pickupSuggestions, setPickupSuggestions] = useState([]);
   const [vehicleType, setVehicleType] = useState(null);
   const [fare, setFare] = useState({});
-  const [ ride, setRide ] = useState(null)
+  const [ride, setRide] = useState(null);
   const { socket } = useContext(SocketContext);
   const { user } = useContext(UserDataContext);
 
@@ -42,7 +41,7 @@ const Home = () => {
     socket.emit("join", { userType: "user", userId: user._id });
   }, [user]);
 
-  socket.on("ride-confirmed", ride => {
+  socket.on("ride-confirmed", (ride) => {
     setryderFoundPanelOpen(true);
     setLookingForRyderPanelOpen(false);
     setRide(ride);
@@ -195,7 +194,6 @@ const Home = () => {
         },
       }
     );
-    console.log(response.data);
   }
   return (
     <div className="h-screen relative overflow-hidden">
@@ -320,7 +318,10 @@ const Home = () => {
         ref={ryderFoundRef}
         className="fixed z-10 bottom-0 bg-white w-full px-3 py-8 translate-y-full rounded-tl-2xl rounded-tr-2xl "
       >
-        <WaitingForRyder ride={ride} setryderFoundPanelOpen={setryderFoundPanelOpen} />
+        <WaitingForRyder
+          ride={ride}
+          setryderFoundPanelOpen={setryderFoundPanelOpen}
+        />
       </div>
     </div>
   );
